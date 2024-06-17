@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class PopupUI : BaseUI 
 {
-    public int sortOrder;
+    private void Start()
+    {
+        Init();
+    }
+
     public override void Init()
     {
         UIManager.Instance.SetCanvas(gameObject, true);

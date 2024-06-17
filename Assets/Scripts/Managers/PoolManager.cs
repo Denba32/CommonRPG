@@ -61,6 +61,7 @@ public class PoolManager : Singleton<PoolManager>
             // 해당 타입으로 오브젝트를 장착
             // 만약 해당 컴포넌트가 없을 시 오브젝트를 장착
             T component = go.GetComponent<T>();
+            component.name = Original.name;
             if (component == null)
             {
                 component = go.AddComponent<T>();
@@ -99,6 +100,17 @@ public class PoolManager : Singleton<PoolManager>
     // 최상위 부모
     private Dictionary<(string, Type), object> poolDict = new Dictionary<(string, Type), object>();
 
+
+    public bool Exists(string name, Type type)
+    {
+        var key = (name, type);
+
+        if (poolDict.ContainsKey(key))
+        {
+            return true;
+        }
+        return false;
+    }
     // 데이터 전부 삭제
     public void Clear()
     {

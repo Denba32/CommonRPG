@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Extension : MonoBehaviour
+public static class Extension
 {
-    // Start is called before the first frame update
-    void Start()
+    public static T GetOrAddComponent<T>(this GameObject go) where T : UnityEngine.Component
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        return Util.GetOrAddComponent<T>(go);
+    }   
 }

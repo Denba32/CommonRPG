@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
-    List<PopupUI> popupUI = new List<PopupUI>();
+    Stack<PopupUI> popupStack = new Stack<PopupUI>();
     SceneUI sceneUI = null;
 
-    private int currentOrder;
+    private int currentOrder = 0;
 
 
     public GameObject Root
@@ -47,17 +47,11 @@ public class UIManager : Singleton<UIManager>
             name = typeof(T).Name;
 
         GameObject go = Managers.GetService<ResourceManager>().Instantiate($"UI/Popup/{name}");
-
         T popup = Util.GetOrAddComponent<T>(go);
+        popupStack.Push(popup);
 
-        popup.Init();
-        popup.sortOrder = currentOrder;
 
-        popupUI.Add(popup);
-        popupUI.Sort((x, y) => x.sortOrder.CompareTo(y.sortOrder));
         go.transform.SetParent(Root.transform);
-
-        Util.ActiveCursor(true);
 
         return popup;
     }
@@ -65,27 +59,31 @@ public class UIManager : Singleton<UIManager>
 
     public void ClosePopupUI(PopupUI popup)
     {
-        if (popupUI.Count <= 0)
+        if (popupStack.Count == 0)
+            return;
+
+        if (popupStack.Peek() != popup)
         {
+            Debug.Log("Close Popup Failed");
             return;
         }
 
-        popupUI.Remove(popup);
+        ClosePopupUI();
+    }
+    public void ClosePopupUI()
+    {
+        if (popupStack.Count == 0)
+            return;
 
+        PopupUI popup = popupStack.Pop();
+        Managers.GetService<ResourceManager>().Destroy(popup.gameObject);
+        popup = null;
 
         currentOrder--;
-
-
-        popupUI.Sort((x, y) => x.sortOrder.CompareTo(y.sortOrder));
-
-        if (popupUI.Count <= 0)
-        {
-            Util.ActiveCursor(false);
-        }
     }
 
 
-
+    // T는 스크립트, name은 prefab의 이름, 팝업을 여는 기능
     public T ShowSceneUI<T>(string name = null) where T : SceneUI
     {
         if (string.IsNullOrEmpty(name))
@@ -95,14 +93,19 @@ public class UIManager : Singleton<UIManager>
         T sceneUI = Util.GetOrAddComponent<T>(go);
         this.sceneUI = sceneUI;
 
+
         go.transform.SetParent(Root.transform);
 
         return sceneUI;
     }
-
     public void Clear()
     {
-        popupUI.Clear();
+        popupStack.Clear();
         sceneUI = null;
+    }
+
+    public void ShowAlert(string text)
+    {
+        ShowPopupUI<AlertUI>().SetText(text);
     }
 }

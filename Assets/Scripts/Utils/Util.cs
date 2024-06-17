@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,5 +44,10 @@ public class Util
             Cursor.visible = false;
 
         }
+    }
+
+    public static string GetTime()
+    {
+        return DateTime.Now.ToString("HH:mm:ss");
     }
 }
