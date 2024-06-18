@@ -41,7 +41,7 @@ public class LoginUI : PopupUI
 
     private void FinishInput(string pass)
     {
-        if(pass.Length < 9 || pass.Equals(string.Empty))
+        if(pass.Length < 4 || pass.Equals(string.Empty))
         {
             btnLogin.interactable = false;
             return;

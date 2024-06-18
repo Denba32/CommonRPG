@@ -21,5 +21,4 @@ public class LoginScene : BaseScene
     {
         yield return StartCoroutine(SceneManagerEX.Instance.LoadManagerScene());
     }
-
 }

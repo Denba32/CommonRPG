@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FiniteStateMachine : MonoBehaviour
+public class FiniteStateMachine
 {
     public IState CurrentState { get; private set; }
 
     public void Initialize(IState initial)
     {
+        CurrentState?.Enter();
         CurrentState = initial;
     }
     public void ChangeState(IState nextState)
@@ -16,7 +17,4 @@ public class FiniteStateMachine : MonoBehaviour
         CurrentState = nextState;
         CurrentState?.Enter();
     }
-
-    private void Update() => CurrentState?.LogicUpdate();
-    private void FixedUpdate() => CurrentState?.PhysicsUpdate();
 }

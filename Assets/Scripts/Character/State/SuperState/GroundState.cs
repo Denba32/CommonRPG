@@ -23,9 +23,16 @@ public class GroundState : CharacterState
         base.Exit();
     }
 
+    // GroundCheck
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (!character.controller.isGrounded)
+        {
+            // TODO Ground -> Air
+        }
+
     }
 
     public override void PhysicsUpdate()

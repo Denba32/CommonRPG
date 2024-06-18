@@ -18,4 +18,10 @@ public class Define
         MAX
     }
 
+    public enum CharacterType
+    {
+        Player,
+        Enemy
+    }
+
 }
